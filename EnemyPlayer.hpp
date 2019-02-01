@@ -9,12 +9,13 @@ class EnemyPlayer {
 public:
     Coordinates previouscoords;
     Coordinates nextcoords;
-    bool succesfulhit;
+    std::string status;
+    
     int ShipSizes[5] = {5, 4, 3, 3, 2};
     
     EnemyPlayer();
-    void UpdateGameStatus();
-    Coordinates GetCoordinates(bool);
+    void UpdateGameStatus(bool);
+    Coordinates GetNextHitCoordinates();
 };
 
 #endif

@@ -11,17 +11,69 @@
 
 
 EnemyPlayer::EnemyPlayer() {
-    succesfulhit = false;
+    status = "";
 }
 
-void EnemyPlayer::UpdateGameStatus() {
+void EnemyPlayer::UpdateGameStatus(bool hit) {
+    //ship can also extend both ways
+    //hit the other side after miss on the direction you're going (depending on shipsizes left?)
+    //have to check if valid coordinates
+    Coordinates prev, next; //0, 0, ""
+    
+    this->previouscoords = this->nextcoords;
+    
+    if (hit) {
+        this->status += "h"; //append h
+        if (this->status.length() == 1) {            //it's a hit, first hit
+            this->nextcoords.y--;
+        }
+        
+        else {                                      // it's "h(however no. of m's)h"
+            //you hit in the same direction
+            if (this->status.length() == 2) {       //hh
+                this->nextcoords.y--;
+            }
+            else if (this->status.length() == 3) {  //hmh
+                this->nextcoords.x++;
+            }
+            else if (this->status.length() == 4) {  //hmmh
+                this->nextcoords.y++;
+            }
+            else if (this->status.length() == 5) {  //hmmmh
+                this->nextcoords.x--;
+            }
+            this->status.pop_back();
+        }
+    }
+
+    else if ((!hit) && (this->status.length() < 5)) { //and it's only been hmmm
+        //you hit clockwise
+        this->status += "m";
+        if (this->status.length() == 2) {
+            this->nextcoords.x++;
+        }
+        else if (this->status.length() == 3) {
+            this->nextcoords.y++;
+        }
+        else if (this->status.length() == 4) {
+            this->nextcoords.x--;
+        }
+    }
+    
+    else if ((!hit) && (this->status.length() > 5)) {
+        this->status = "";
+        //check the other side?
+        //should i store starting hit?
+    }
+    
+    else {     //&&
+        this->status = "";
+        this->nextcoords.x = rand() % 10 + 1;
+        this->nextcoords.y = rand() % 10 + 1;
+    }
     
 }
 
-Coordinates EnemyPlayer::GetCoordinates(bool) {
-    
-    Coordinates coords;
-    
-    
-    return coords;
+Coordinates EnemyPlayer::GetNextHitCoordinates() {
+    return this->nextcoords;
 }

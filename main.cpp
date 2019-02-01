@@ -39,7 +39,6 @@ int main(int argc, const char * argv[]) {
             Coordinates shipcoords(coords);
             ship->x = shipcoords.x;
             ship->y = shipcoords.y;
-            //have to check if coordinates are valid
             std::cout<< "Enter the direction (u, d, l, r):  ";
             std::cin >> ship->direction;
             ship->shipnumber = i+1;
@@ -65,28 +64,29 @@ int main(int argc, const char * argv[]) {
         bool hit = false;
         
         do {
+            
             std::cout << "Where would you like to hit (A1, A2, A3... ): ";
             std::getline(std::cin, coords);
             Coordinates shipcoords(coords);
             RunningGame.Hit(1, shipcoords.x, shipcoords.y);         //check if valid coordinates
             
-            if (RunningGame.BoardGames[1].AllShipsSank() == true) { //can place this insde hit function
+            if (RunningGame.BoardGames[1].AllShipsSank() == true) { //can place this inisde hit function
                 endgame = true;
+                RunningGame.DrawBoards();
                 std::cout << "Win Player One. \n";
                 break;
             }
             
-            
-            Coordinates hitcoords = PlayerTwo.GetCoordinates();
+            Coordinates hitcoords = PlayerTwo.GetNextHitCoordinates();
             hit = RunningGame.Hit(0, hitcoords.x, hitcoords.y);
-            
             PlayerTwo.UpdateGameStatus(hit);
             
-            RunningGame.DrawBoards();
             if (RunningGame.BoardGames[0].AllShipsSank() == true) {
                 endgame = true;
                 std::cout << "Win Player Two. \n";
             }
+            
+            RunningGame.DrawBoards();
             
         } while (!endgame);
 
