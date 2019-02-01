@@ -6,6 +6,8 @@
 #include "Game.hpp"
 #include "Board.hpp"
 #include "Coordinates.hpp"
+#include "EnemyPlayer.hpp"
+
 
 int main(int argc, const char * argv[]) {
     
@@ -52,8 +54,9 @@ int main(int argc, const char * argv[]) {
         
         std::cin.ignore();
         
-        BoardTwo.RandomShipGenerator(); //for loop as above with random x and y and direction
-        //BoardTwo.DrawBoard();
+        EnemyPlayer PlayerTwo;
+        BoardTwo.RandomShipGenerator();
+        
         //should make a copy constructor
         RunningGame.AddBoards(&BoardOne, &BoardTwo);
         
@@ -67,30 +70,18 @@ int main(int argc, const char * argv[]) {
             Coordinates shipcoords(coords);
             RunningGame.Hit(1, shipcoords.x, shipcoords.y);         //check if valid coordinates
             
-            if (RunningGame.BoardGames[1].AllShipsSank() == true) {
+            if (RunningGame.BoardGames[1].AllShipsSank() == true) { //can place this insde hit function
                 endgame = true;
                 std::cout << "Win Player One. \n";
                 break;
             }
             
-            //change random so that if it's a hit, it tries to sink the surrounding
-            //next hit will be the surroundings until next succesful hit, counter (up to ?, from top going clockwise)?
-            //has to know - if success hit, previous hit, sizes of ships still not sank, distance from hit to border (if ship fits), the direction it should go after conscutive hits
             
-            int xHit, yHit;
-            if (hit) {          //not just success hit..
-                                //go around the hit until you get another success hit,
-                                //if the ship hasn't fully sank, keep hitting in same direction
-                //Coordinates hitcoords = GetNextCoordinates(previods coordinates, counter?, direction? (can use counter?), );
-                //xHit = hitcoords.x;
-                //yHit = hitcoords.y;
-            }
-            else {
-                srand(time(NULL));
-                xHit = rand() % 10 + 1;
-                yHit = rand() % 10 + 1;
-            }
-            hit = RunningGame.Hit(0, xHit, yHit);
+            Coordinates hitcoords = PlayerTwo.GetCoordinates();
+            hit = RunningGame.Hit(0, hitcoords.x, hitcoords.y);
+            
+            PlayerTwo.UpdateGameStatus(hit);
+            
             RunningGame.DrawBoards();
             if (RunningGame.BoardGames[0].AllShipsSank() == true) {
                 endgame = true;
