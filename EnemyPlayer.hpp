@@ -9,6 +9,7 @@ class EnemyPlayer {
 public:
     Coordinates previouscoords;
     Coordinates nextcoords;
+    char direction;
     std::string status;
     
     int ShipSizes[5] = {5, 4, 3, 3, 2};
