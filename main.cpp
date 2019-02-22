@@ -30,7 +30,7 @@ int main(int argc, const char * argv[]) {
         std::cout<< "Where would you like to place your ships? Make sure it does not go outside the board. \n";
         //ask if they want to have the game randomly place their ships?
         
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 1; i++) {
             Ship *ship = new Ship();                    //gotta delete
             std::cout << "Ship Size: " << ShipSizes[i] << std::endl;
             std::cout << "Enter starting coordinates (A1, A2, A3...): ";
@@ -61,14 +61,22 @@ int main(int argc, const char * argv[]) {
         
         //START GAME
         bool endgame = false;
-        bool hit = false;
+        
+        int hitstatus = 0;
         
         do {
             
             std::cout << "Where would you like to hit (A1, A2, A3... ): ";
             std::getline(std::cin, coords);
             Coordinates shipcoords(coords);
-            RunningGame.Hit(1, shipcoords.x, shipcoords.y);         //check if valid coordinates
+            hitstatus = RunningGame.Hit(1, shipcoords.x, shipcoords.y);
+            while (hitstatus > 1) {
+                std::cout << "Where would you like to hit (A1, A2, A3... ): ";
+                std::getline(std::cin, coords);
+                Coordinates shipcoords(coords);
+                hitstatus = RunningGame.Hit(1, shipcoords.x, shipcoords.y);
+            }
+            
             
             if (RunningGame.BoardGames[1].AllShipsSank() == true) { //can place this inisde hit function
                 endgame = true;
@@ -77,9 +85,10 @@ int main(int argc, const char * argv[]) {
                 break;
             }
             
+            
             Coordinates hitcoords = PlayerTwo.GetNextHitCoordinates();
-            hit = RunningGame.Hit(0, hitcoords.x, hitcoords.y);
-            PlayerTwo.UpdateGameStatus(hit);
+            hitstatus = RunningGame.Hit(0, hitcoords.x, hitcoords.y);
+            PlayerTwo.UpdateGameStatus(hitstatus);
             
             if (RunningGame.BoardGames[0].AllShipsSank() == true) {
                 endgame = true;

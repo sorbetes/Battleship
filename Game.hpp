@@ -14,11 +14,12 @@ public:
     Game();
     Board BoardGames[2];
     
+    
     void DrawBoards();
     void AddBoards (Board*, Board*);
-    bool Hit (int boardnum, int x, int y);
+    int Hit (int boardnum, int x, int y);
     
 };
 
 
-#endif /* Game_hpp */
+#endif

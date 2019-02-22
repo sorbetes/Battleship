@@ -52,19 +52,35 @@ void Game::AddBoards(Board *One, Board *Two) {
     this->BoardGames[1] = *Two;
 }
 
-bool Game::Hit(int boardnum, int x, int y) {
-    if (((this->BoardGames[boardnum].BoardArray[x-1][y-1]) < 6 )) {
-        this->BoardGames[boardnum].ShipList[this->BoardGames[boardnum].BoardArray[x-1][y-1]].hitcount++;
-        this->BoardGames[boardnum].BoardArray[x-1][y-1] = 8; //hit, ship
-        return true;
+
+int Game::Hit(int boardnum, int x, int y) {
+    
+    //For User, if they make a mistake with input, ask user for another set of coords
+    if ((x > 10) || (y > 10) || (x < 1) || (y < 1)) {
+        std::cout << "Outside board. ";
+        return 2;
     }
-    //need to do another expression for when tile has already been hit
-    //(return 0 for hit ship, 1 for hit water, 2 for already hit or invalid coordinates)
+    else if (this->BoardGames[boardnum].BoardArray[x-1][y-1] > 7) {
+        std::cout << "Already been hit. ";
+        return 3;
+    }
+    
+    
+    
+    //Check tiles if it's ship or water
+    else if (((this->BoardGames[boardnum].BoardArray[x-1][y-1]) < 6 )) {
+        this->BoardGames[boardnum].ShipList[this->BoardGames[boardnum].BoardArray[x-1][y-1]].hitcount++;
+        this->BoardGames[boardnum].BoardArray[x-1][y-1] = 8;                //hit, ship
+        return 0;
+    }
     
     else {
-        this->BoardGames[boardnum].BoardArray[x-1][y-1] = 9; //hit, water
-        return false;
+        this->BoardGames[boardnum].BoardArray[x-1][y-1] = 9;                //hit, water
+        return 1;
     }
+    
+    //need to do another expression for when tile has already been hit
+    //(return 0 for hit ship, 1 for hit water, 2 for already hit or invalid coordinates)
     
 }
 
