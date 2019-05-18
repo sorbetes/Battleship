@@ -1,6 +1,6 @@
 #ifndef EnemyPlayer_hpp
 #define EnemyPlayer_hpp
-
+#include <map>
 #include <stdio.h>
 #include <vector>
 #include "Coordinates.hpp"
@@ -17,8 +17,10 @@ public:
     //std::vector <std::string> possiblecoords;
     
     EnemyPlayer();
-    void UpdateGameStatus(int);
+    void UpdateGameStatus(int, std::map<int, std::string> &);
     Coordinates GetNextHitCoordinates();
+    
+    int possiblecoords_n[100];
 };
 
 #endif
